@@ -45,6 +45,8 @@ x[1:25,2] <- x[1:25,2]-4   # 4 units down
 plot(x,main = 'After Shift')
 ```
 
+### The Model
+
 To perform *K-Means* clustering we use the function *kmeans()* (built-in with *stats* 
 package).
 
@@ -82,7 +84,6 @@ and plot the first two principal components score vectors.
 # Plot eg code once PCA is done
 ```
 
-
 In this example, we knew that there really were two clusters because
 we generated the data. However, for real data, in general we do not know
 the true number of clusters. 
@@ -105,6 +106,8 @@ plot(x, col=(km.out$cluster +1),
 text(x, labels=km.out$cluster,cex=0.9, font=10,pos=4)
 ```
 
+### Additional Parameters and Tuning
+
 To run the kmeans() function in R with multiple initial cluster assignments, we use the <span style="color:red">**nstart**</span> argument. If a value of <span style="color:red">**nstart**</span> greater than one
 is used, then K-means clustering will be performed using multiple random
 assignments in Step 1 of Algorithm 10.1,
@@ -119,14 +122,14 @@ to <span style="color:red">**nstart=20**</span>. We can also think of this as th
 of times we wish to perform K-Means Clustering since its based on random initialization.
 
 ```{r}
-set.seed(3)
+set.seed(4)
 km.out <- kmeans (x, centers = 3, nstart =1) # nstart: if centers is a number how 
                                   #         many random sets should be chosen?
 km.out$tot.withinss
 ```
 
 ```{r}
-set.seed(3)
+set.seed(4)
 km.out <- kmeans (x, centers = 3, nstart =20)
 km.out$tot.withinss
 ```
@@ -137,20 +140,58 @@ which we seek to minimize by performing K-means clustering (Equation
 $$\underset{C_1,\ldots,C_K}{\text{minimize}}\left\{\sum_{k=1}^K\frac{1}{|C_K|}\sum_{i,i' \in C_k} \sum_{j=1}^p(x_{ij}-x_{i'j})^2 \right\}$$
 
 The individual within-cluster sum-of-squares are contained in the
-vector <span style="color:red">km.out$withinss</span>.
+vector <span style="color:red">**km.out$withinss**</span>.
 
 It is recommend to always running *K-means* clustering with a large
-value of nstart, such as 20 or 50, to minimize the chance of getting a undersirable
+value of nstart, such as 20 or 50, to minimize the chance of getting a undesirable
 local optimum.
 When performing K-means clustering, in addition to using multiple initial cluster assignments, it is also important to set a random seed using the
 set.seed() function. This way, the initial cluster assignments in Step 1 can
 be replicated, and the K-means output will be fully reproducible.
 
-Parameters section?
+#### Tune the optimal number of clusters (k)
+
+Create a vector to store 15 totwithiness scores
+```{r}
+kmax <- 15
+totwithiness<-rep(0,kmax)
+```
+
+
+Tune k = 1 to 15
+```{r}
+for (k in 1:kmax)
+{
+  totwithiness[k] = kmeans(x, 
+                           k, # number of clusters
+                           nstart=25,
+                           iter.max = 15 # maximum number of iterations allowed
+                           )$tot.withinss
+}
+```
+
+
+Scree plot: tot.withinss by k
+```{r}
+plot(1:kmax, totwithiness,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares",
+     xlim = c(0,kmax+1),
+     ylim = c(0,max(totwithiness)))
+
+# below is just to highlight elbow on graph #
+axis(1:kmax)
+par(new=TRUE)
+plot(2,totwithiness[2], ylim = c(0,max(totwithiness)), xlim = c(0,kmax+1),
+     xlab = "", ylab = "", pch = 1, col ="blue", cex = 3)
+```
+
 
 ## Hierarchical Clustering {.tabset}
-The hclust() function implements hierarchical clustering in R. In the fol- hclust() lowing example we use the data from Section 10.5.1 to plot the hierarchical clustering dendrogram using complete, single, and average linkage clustering, with Euclidean distance as the dissimilarity measure. We begin by clustering observations using complete linkage. The dist() function is used
-dist() to compute the 50 × 50 inter-observation Euclidean distance matrix.
+The <span style="color:red">**hclust()**</span> function implements hierarchical clustering in R. In the following example, we use the data from above to plot the hierarchical clustering dendrogram using complete, single, and average linkage clustering, with Euclidean distance as the dissimilarity measure.
+
+We begin by clustering observations using complete linkage. The <span style="color:red"><span style="color:red">**dist()**</span> function is used to compute the 50 × 50 inter-observation Euclidean distance matrix.
 
 ```{r}
 hc.complete <- hclust(dist(x), method="complete") # tells type of cluster method, type of distance used, and total data points
@@ -163,7 +204,7 @@ hc.average <- hclust(dist(x), method ="average")
 hc.single <- hclust(dist(x), method ="single")
 ```
 
-We can now plot the dendrograms obtained using the usual plot() function.The numbers at the bottom of the plot identify each observation.
+We can now plot the dendrograms obtained using the usual <span style="color:red">**plot()**</span> function.The numbers at the bottom of the plot identify each observation.
 
 ```{r pressure, echo=FALSE}
 par(mfrow=c(1,3))
@@ -177,7 +218,7 @@ plot(hc.single , main="Single Linkage", xlab="", sub="",
 cex=.9) # produces branches for every single observation. Not the most comprehensive heirachrical plotting method
 ```
 
-To determine the cluster labels for each observation associated with a given cut of the dendrogram, we can use the cutree() function:
+To determine the cluster labels for each observation associated with a given cut of the dendrogram, we can use the <span style="color:red">**cutree()**</span> function:
 
 ```{r, echo=FALSE}
 cutree(hc.complete , 2) # Shows complete separation of clusters classes
@@ -198,7 +239,7 @@ For this data, complete and average linkage generally separate the observations 
 cutree(hc.single , 4)
 ```
 
-To scale the variables before performing hierarchical clustering of the observations, we use the scale() function:
+To scale the variables before performing hierarchical clustering of the observations, we use the <span style="color:red">**scale()**</span> function:
 
 ```{r, echo=FALSE}
 xsc=scale(x)
@@ -206,7 +247,7 @@ plot(hclust(dist(xsc), method ="complete"), main=" Hierarchical
 Clustering with Scaled Features ")
 ```
 
-Correlation-based distance can be computed using the as.dist() funcas.dist() tion, which converts an arbitrary square symmetric matrix into a form that the hclust() function recognizes as a distance matrix. However, this only makes sense for data with at least three features since the absolute correlation between any two observations with measurements on two features is always 1. Hence, we will cluster a three-dimensional data set
+Correlation-based distance can be computed using the <span style="color:red">**as.dist()**</span> function, which converts an arbitrary square symmetric matrix into a form that the <span style="color:red">**hclust()**</span> function recognizes as a distance matrix. However, this only makes sense for data with at least three features since the absolute correlation between any two observations with measurements on two features is always 1. Hence, we will cluster a three-dimensional data set
 
 ```{r, echo=FALSE}
 x=matrix(rnorm (30*3), ncol=3)
@@ -216,5 +257,67 @@ with Correlation -Based Distance", xlab="", sub ="")
 ```
 
 
-## Applied Exercise No. 9 {.tabset}
+## Applied Exercise No. 9
 
+We will be using the <span style="color:red">**USArrests**</span> data set from
+the *ISLR* library.
+
+```{r}
+library(ISLR)
+```
+
+
+
+#### a.) Using hierarchical clustering with complete linkage and Euclidean distance, cluster the states.
+
+```{r}
+set.seed(5082)
+hcluster.complete <- hclust(dist(USArrests), method = "complete")
+plot(hcluster.complete)
+```
+
+#### b.) Cut the dendrogram at a height that results in three distinct clusters. Which states belong to which clusters?
+```{r}
+# cutree(tree, k = NULL, h = NULL) , can speicify clusters (k) or dissimilarity
+# height (h).
+cutree(hcluster.complete, k = 3)
+```
+
+```{r}
+table(cutree(hc.complete, 3))
+```
+
+#### c.) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one.
+
+```{r}
+# First we scale the data -- similar to PCR
+scaledData <- scale(USArrests)
+hscaled.complete <- hclust(dist(scaledData), method = "complete")
+plot(hscaled.complete)
+```
+
+
+#### d.) What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer.
+
+```{r}
+cutree(hscaled.complete, 3)
+```
+
+```{r}
+table(cutree(hscaled.complete, 3))
+```
+
+We can compare the difference between scaled and unscaled versions.
+
+```{r}
+table(cutree(hscaled.complete, 3), cutree(hcluster.complete, 3))
+```
+
+
+Observations from scaling the variables:
+
+* The max height of the dendrogram obtained from hierarchical clustering becomes smaller. 
+* From a cursory glance, it doesn’t effect the bushiness of the tree obtained. 
+* Affects the clusters obtained from cutting the dendrogram into 3 clusters.
+
+The data should be standardized because the data measured has different units (UrbanPop compared to other three columns).
