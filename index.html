@@ -2916,7 +2916,7 @@ plot(2,totwithiness[2], ylim = c(0,max(totwithiness)), xlim = c(0,kmax+1),
 <div id="hierarchical-clustering" class="section level2 tabset">
 <h2>Hierarchical Clustering</h2>
 <p>The <span style="color:red"><strong>hclust()</strong></span> function implements hierarchical clustering in R. In the following example, we use the data from above to plot the hierarchical clustering dendrogram using complete, single, and average linkage clustering, with Euclidean distance as the dissimilarity measure.</p>
-<p>We begin by clustering observations using complete linkage. The <span style="color:red"></span><strong>dist()</strong></span> function is used to compute the 50 × 50 inter-observation Euclidean distance matrix.</p>
+<p>We begin by clustering observations using complete linkage. The <span style="color:red"><strong>dist()</strong></span> function is used to compute the 50 × 50 inter-observation Euclidean distance matrix.</p>
 <pre class="r"><code>hc.complete &lt;- hclust(dist(x), method=&quot;complete&quot;) # tells type of cluster method, type of distance used, and total data points</code></pre>
 <p>We could just as easily perform hierarchical clustering with average or single linkage instead:</p>
 <pre class="r"><code>hc.average &lt;- hclust(dist(x), method =&quot;average&quot;)
