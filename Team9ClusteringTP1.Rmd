@@ -1,6 +1,6 @@
 ---
 title: "ClusteringML2"
-author: "Group 17 - Thomas Trankle, Jaida Clarke, Andrew Tremblay and Jill van den Dungen"
+author: "Group 9 - Thomas Trankle, Jaida Clarke, Andrew Tremblay and Jill van den Dungen"
 date: "3/22/2021"
 output: 
   html_document:
@@ -17,14 +17,9 @@ knit: (function(inputFile, encoding) {
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-1. Objectives: What problem are we trying to solve?
-2. Dataset: Is this a real dataset? simulated dataset? Briefly explain the X's and Y's
-3. Explore the dataset: Key highlights - Correlations? summary statistics? Plots?
-4. Feature engineering: Do you have to transform variables? log/scale/polynomials?
-5. Train/test the model: Emphasize the new library/command you're introducing here, and key tuning parameters (e.g., lambda)
-6. Evaluate the model: What metrics are you using? Are you tuning any parameters? Plots?
-
 ## K-Means {.tabset}
+
+https://www.mrc-lmb.cam.ac.uk/genomes/madanm/microarray/chapter-final.pdf
 
 ### Create a Simulated Dataset
 
@@ -205,43 +200,60 @@ hc.single <- hclust(dist(x), method ="single")
 ```
 
 We can now plot the dendrograms obtained using the usual <span style="color:red">**plot()**</span> function.The numbers at the bottom of the plot identify each observation.
+```{r, echo=FALSE,out.height="40%", fig.cap=""}
+knitr::include_graphics("./linkage.png")
+```
 
-```{r pressure, echo=FALSE}
+
+```{r pressure}
 par(mfrow=c(1,3))
 plot(hc.complete ,main="Complete Linkage ", xlab="", sub="",
-cex=.9) # produces a cleaner plot that is easy to follow
+cex=.9, col = "deepskyblue") # produces a cleaner plot that is easy to follow
 
 plot(hc.average , main="Average Linkage", xlab="", sub="",
-cex=.9)
+cex=.9, col = "goldenrod3")
 
 plot(hc.single , main="Single Linkage", xlab="", sub="",
-cex=.9) # produces branches for every single observation. Not the most comprehensive heirachrical plotting method
+cex=.9, col = "darkseagreen") # produces branches for every single observation. Not the most comprehensive heirachrical plotting method
 ```
 
 To determine the cluster labels for each observation associated with a given cut of the dendrogram, we can use the <span style="color:red">**cutree()**</span> function:
 
-```{r, echo=FALSE}
+```{r}
 cutree(hc.complete , 2) # Shows complete separation of clusters classes
+plot(hc.complete ,main="Complete Linkage ", xlab="", sub="",
+cex=.9)
+abline(h= 7, col = "red", lty = "dashed")
 ```
 
 ```{r}
 cutree(hc.average , 2)
+plot(hc.average , main="Average Linkage", xlab="", sub="",
+cex=.9)
+abline(h= 4, col = "red", lty = "dashed")
 ```
 
 ```{r}
 cutree(hc.single , 2)
+plot(hc.single , main="Single Linkage", xlab="", sub="",
+cex=.9)
+abline(h= 1.39, col = "red", lty = "dashed")
 ```
 
 For this data, complete and average linkage generally separate the observations into their correct groups. However, single linkage identifies one point as belonging to its own cluster. A more sensible answer is obtained when four clusters are selected, although there are still two singletons.
 
 
-```{r, echo=FALSE}
+```{r}
 cutree(hc.single , 4)
+plot(hc.single , main="Single Linkage", xlab="", sub="",
+cex=.9)
+abline(h= 1.25, col = "red", lty = "dashed")
+
 ```
 
 To scale the variables before performing hierarchical clustering of the observations, we use the <span style="color:red">**scale()**</span> function:
 
-```{r, echo=FALSE}
+```{r,out.width="110%"}
 xsc=scale(x)
 plot(hclust(dist(xsc), method ="complete"), main=" Hierarchical
 Clustering with Scaled Features ")
@@ -249,7 +261,7 @@ Clustering with Scaled Features ")
 
 Correlation-based distance can be computed using the <span style="color:red">**as.dist()**</span> function, which converts an arbitrary square symmetric matrix into a form that the <span style="color:red">**hclust()**</span> function recognizes as a distance matrix. However, this only makes sense for data with at least three features since the absolute correlation between any two observations with measurements on two features is always 1. Hence, we will cluster a three-dimensional data set
 
-```{r, echo=FALSE}
+```{r,out.width="110%"}
 x=matrix(rnorm (30*3), ncol=3)
 dd=as.dist(1-cor(t(x)))
 plot(hclust(dd, method ="complete"), main=" Complete Linkage
@@ -270,7 +282,7 @@ library(ISLR)
 
 #### a.) Using hierarchical clustering with complete linkage and Euclidean distance, cluster the states.
 
-```{r}
+```{r,out.width="120%"}
 set.seed(5082)
 hcluster.complete <- hclust(dist(USArrests), method = "complete")
 plot(hcluster.complete)
@@ -289,7 +301,7 @@ table(cutree(hc.complete, 3))
 
 #### c.) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one.
 
-```{r}
+```{r,out.width="120%"}
 # First we scale the data -- similar to PCR
 scaledData <- scale(USArrests)
 hscaled.complete <- hclust(dist(scaledData), method = "complete")
@@ -321,3 +333,9 @@ Observations from scaling the variables:
 * Affects the clusters obtained from cutting the dendrogram into 3 clusters.
 
 The data should be standardized because the data measured has different units (UrbanPop compared to other three columns).
+
+
+## References
+
+* Babu, M. M., & Grant, R. (n.d.). Computational Genomics. Horizon Press.
+
