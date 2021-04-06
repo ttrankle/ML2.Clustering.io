@@ -19,8 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## K-Means {.tabset}
 
-https://www.mrc-lmb.cam.ac.uk/genomes/madanm/microarray/chapter-final.pdf
-
 ### Create a Simulated Dataset
 
 We begin with a simple simulated example in which there are **truly two clusters** in the
@@ -200,7 +198,7 @@ hc.single <- hclust(dist(x), method ="single")
 ```
 
 We can now plot the dendrograms obtained using the usual <span style="color:red">**plot()**</span> function.The numbers at the bottom of the plot identify each observation.
-```{r, echo=FALSE,out.height="40%", fig.cap=""}
+```{r, echo=FALSE,out.height="40%", fig.cap="https://www.mrc-lmb.cam.ac.uk/genomes/madanm/microarray/chapter-final.pdf"}
 knitr::include_graphics("./linkage.png")
 ```
 
