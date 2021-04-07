@@ -91,12 +91,11 @@ km.out <- kmeans (df,2, nstart =20)
 fviz_cluster(km.out, data = df)
 ```
 
+#### Changing K
+
 In this example, we knew that there really were two clusters because
 we generated the data. However, for real data, in general we do not know
 the true number of clusters. 
-
-
-#### Changing K
 
 We could instead have performed K-means clustering on this example with K = 3, for 
 example
