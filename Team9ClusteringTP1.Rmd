@@ -76,7 +76,7 @@ Here the observations can be easily plotted because they are **two-dimensional**
 If there were more than two variables then we could instead perform PCA
 and plot the first two principal components score vectors. 
 
-Alternatively, we can use the it using <span style="color:red">**fviz_cluster**</span>. This provides a nice illustration of the clusters. If there are more than two dimensions (variables) <span style="color:red">**fviz_cluster**</span> will perform principal component analysis (PCA) and plot the data points according to the first two principal components that explain the majority of the variance. *This function is not in the textbook lab.
+Alternatively, we can use the <span style="color:red">**fviz_cluster**</span> function. This provides a nice illustration of the clusters. If there are more than two dimensions (variables) <span style="color:red">**fviz_cluster**</span> will perform principal component analysis (PCA) and plot the data points according to the first two principal components that explain the majority of the variance. *This function is not in the textbook lab.
 
 ```{r, warning=F,message=F}
 library(factoextra)
