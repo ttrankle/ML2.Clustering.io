@@ -53,8 +53,10 @@ After the model is run, we call the argument km.out$cluster to display the clust
 ```{r}
 km.out <- kmeans (x,2, nstart =20) # kmeans(x, centers, iter.max = 10, nstart = 1,
                                    # algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
-km.out$cluster                     # "MacQueen"), trace=FALSE)
+                                   # "MacQueen"), trace=FALSE)
 
+# Display cluster labels assigned to each obs.
+km.out$cluster 
 ```
 
 
@@ -76,7 +78,7 @@ and plot the first two principal components score vectors.
 
 Alternatively, we can use the it using <span style="color:red">**fviz_cluster**</span>. This provides a nice illustration of the clusters. If there are more than two dimensions (variables) <span style="color:red">**fviz_cluster**</span> will perform principal component analysis (PCA) and plot the data points according to the first two principal components that explain the majority of the variance. *This function is not in the textbook lab.
 
-```{r}
+```{r, warning=F,message=F}
 library(factoextra)
 set.seed(2)
 df <- matrix(rnorm (50*3), ncol=3)   # Create a 50 X 3 matrix
@@ -92,6 +94,9 @@ fviz_cluster(km.out, data = df)
 In this example, we knew that there really were two clusters because
 we generated the data. However, for real data, in general we do not know
 the true number of clusters. 
+
+
+#### Changing K
 
 We could instead have performed K-means clustering on this example with K = 3, for 
 example
@@ -129,7 +134,7 @@ of times we wish to perform K-Means Clustering since its based on random initial
 ```{r}
 set.seed(4)
 km.out <- kmeans (x, centers = 3, nstart =1) # nstart: if centers is a number how 
-                                  #         many random sets should be chosen?
+                                             # many random sets should be chosen?
 km.out$tot.withinss
 ```
 
