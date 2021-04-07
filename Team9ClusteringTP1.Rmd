@@ -196,6 +196,11 @@ plot(2,totwithiness[2], ylim = c(0,max(totwithiness)), xlim = c(0,kmax+1),
      xlab = "", ylab = "", pch = 1, col ="blue", cex = 3)
 ```
 
+We can also use the <span style="color:red">**fviz_nbclust()**</span> function to perform this.
+
+```{r}
+fviz_nbclust(x, kmeans, method = "wss", k.max = 15)
+```
 
 ## Hierarchical Clustering {.tabset}
 The <span style="color:red">**hclust()**</span> function implements hierarchical clustering in R. In the following example, we use the data from above to plot the hierarchical clustering dendrogram using complete, single, and average linkage clustering, with Euclidean distance as the dissimilarity measure.
